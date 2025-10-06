@@ -1,7 +1,40 @@
-<script>
-  function getParam(name) {
-    return new URL(window.location).searchParams.get(name) || "";
-  }
-  const abc = decodeURIComponent(getParam("abc"));
-  ABCJS.renderAbc("paper", abc, { responsive: "resize" });
-</script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ABC Tune Viewer</title>
+
+  <!-- ✅ Load ABC.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/abcjs@6.5.2/dist/abcjs-basic-min.js"></script>
+
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; }
+    .wrap { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    #paper svg { width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 id="title">Tune</h1>
+    <div id="paper"></div>
+  </div>
+
+  <script>
+    // Helper: get ?abc= and ?title= params
+    const params = new URLSearchParams(window.location.search);
+    const abcParam = params.get("abc");
+    const titleParam = params.get("title");
+
+    if (titleParam) document.getElementById("title").textContent = decodeURIComponent(titleParam);
+
+    if (abcParam) {
+      const abc = decodeURIComponent(abcParam);
+      ABCJS.renderAbc("paper", abc, { responsive: "resize", staffwidth: 850 });
+    } else {
+      document.getElementById("paper").innerHTML =
+        "<p>No ABC data found in URL. Add ?abc=...</p>";
+    }
+  </script>
+</body>
+</html>
