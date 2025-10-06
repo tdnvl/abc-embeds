@@ -5,38 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ABC Tune Viewer</title>
 
-  <!-- ✅ Load ABC.js FIRST -->
+  <!-- ✅ Load ABC.js -->
   <script src="https://cdn.jsdelivr.net/npm/abcjs@6.5.2/dist/abcjs-basic-min.js"></script>
 
   <style>
     body { margin: 0; font-family: system-ui, sans-serif; }
     .wrap { max-width: 900px; margin: 24px auto; padding: 0 16px; }
     #paper svg { width: 100%; height: auto; }
-    pre { background: #f6f6f6; padding: 8px; border-radius: 6px; overflow-x: auto; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 id="title">Tune</h1>
     <div id="paper"></div>
-    <pre id="raw"></pre>
   </div>
 
-  <!-- ✅ Your code runs only *after* everything else has loaded -->
   <script>
     window.addEventListener('DOMContentLoaded', function () {
       const params = new URLSearchParams(window.location.search);
       const abcParam = params.get("abc");
-      const titleParam = params.get("title");
-
-      if (titleParam) document.getElementById("title").textContent = decodeURIComponent(titleParam);
 
       if (abcParam) {
         const abc = decodeURIComponent(abcParam);
-        document.getElementById("raw").textContent = abc;
         ABCJS.renderAbc("paper", abc, { responsive: "resize", staffwidth: 850 });
       } else {
-        document.getElementById("paper").innerHTML = "<p>No ABC data found in URL. Add ?abc=...</p>";
+        document.getElementById("paper").innerHTML =
+          "<p>No ABC data found in URL. Add ?abc=...</p>";
       }
     });
   </script>
