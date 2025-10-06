@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ABC URL Encoder</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 700px; margin: 2rem auto; }
+  textarea { width: 100%; height: 160px; font-family: monospace; }
+  input { width: 100%; margin-top: .5rem; font-family: monospace; }
+</style>
+</head>
+<body>
+  <h1>ABC to URL Encoder</h1>
+  <p>Paste your ABC below and click “Generate”.</p>
+  <textarea id="abc" placeholder="Paste your ABC notation here"></textarea>
+  <button id="generate">Generate URL</button>
+  <input id="result" readonly placeholder="Encoded URL appears here" />
+
+  <script>
+    const base = "https://yourdomain.com/tune.html";
+    document.getElementById("generate").onclick = () => {
+      const abc = document.getElementById("abc").value.trim();
+      const titleLine = abc.match(/^T:(.*)$/m);
+      const title = titleLine ? titleLine[1].trim() : "Tune";
+      const url = `${base}?title=${encodeURIComponent(title)}&abc=${encodeURIComponent(abc)}`;
+      document.getElementById("result").value = url;
+    };
+  </script>
+</body>
+</html>
