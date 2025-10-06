@@ -8,6 +8,8 @@
   body { font-family: system-ui, sans-serif; max-width: 700px; margin: 2rem auto; }
   textarea { width: 100%; height: 160px; font-family: monospace; }
   input { width: 100%; margin-top: .5rem; font-family: monospace; }
+  button { margin-top: .5rem; }
+  #copy-confirm { color: green; margin-left: .5rem; font-size: 0.9rem; display: none; }
 </style>
 </head>
 <body>
@@ -16,15 +18,34 @@
   <textarea id="abc" placeholder="Paste your ABC notation here"></textarea>
   <button id="generate">Generate URL</button>
   <input id="result" readonly placeholder="Encoded URL appears here" />
+  <button id="copy" disabled>Copy URL</button>
+  <span id="copy-confirm">Copied!</span>
 
   <script>
     const base = "https://tdnvl.github.io/abc-embeds/tune.html";
+
+    const abcField = document.getElementById("abc");
+    const resultField = document.getElementById("result");
+    const copyButton = document.getElementById("copy");
+    const copyConfirm = document.getElementById("copy-confirm");
+
     document.getElementById("generate").onclick = () => {
-      const abc = document.getElementById("abc").value.trim();
-      const titleLine = abc.match(/^T:(.*)$/m);
-      const title = titleLine ? titleLine[1].trim() : "Tune";
-      const url = `${base}?title=${encodeURIComponent(title)}&abc=${encodeURIComponent(abc)}`;
-      document.getElementById("result").value = url;
+      const abc = abcField.value.trim();
+      if (!abc) return;
+      const url = `${base}?abc=${encodeURIComponent(abc)}`;
+      resultField.value = url;
+      copyButton.disabled = false;
+      copyConfirm.style.display = "none";
+    };
+
+    copyButton.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(resultField.value);
+        copyConfirm.style.display = "inline";
+        setTimeout(() => (copyConfirm.style.display = "none"), 1500);
+      } catch (err) {
+        alert("Could not copy URL: " + err);
+      }
     };
   </script>
 </body>
