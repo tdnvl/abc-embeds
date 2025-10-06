@@ -1,0 +1,7 @@
+<script>
+  function getParam(name) {
+    return new URL(window.location).searchParams.get(name) || "";
+  }
+  const abc = decodeURIComponent(getParam("abc"));
+  ABCJS.renderAbc("paper", abc, { responsive: "resize" });
+</script>
